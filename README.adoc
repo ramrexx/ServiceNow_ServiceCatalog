@@ -114,7 +114,7 @@ TIP: For some reason when making REST message `post` calls to CloudForms the use
 
 * Use SSH to log into CloudForms as root.
 
-  curl -v -k -u admin:smartvm -X GET https://cloudforms56a/api/ 2>&1 /dev/null | grep Auth
+  curl -v -k -u admin:smartvm -X GET https://localhost/api/ 2>&1 /dev/null | grep Auth
 
   > Authorization: Basic YWRtaW46c21hcnR2bQ==
 
