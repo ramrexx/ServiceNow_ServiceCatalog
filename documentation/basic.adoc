@@ -1,0 +1,76 @@
+////
+ basic.adoc
+-------------------------------------------------------------------------------
+   Copyright 2016 Kevin Morey <kevin@redhat.com>
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-------------------------------------------------------------------------------
+////
+
+= CloudForms ServiceNow_ServiceCatalog Basic Installation Guide
+
+
+
+== Table of Contents
+
+* <<Overview>>
+* <<Basic Installation>>
+** <<Download the Repo>>
+** <<Import the Update Set>>
+** <<>>
+* link:documentation/userguide.adoc[User Guide]
+* link:documentation/
+* link:documentation/troubleshooting.adoc[Troubleshooting Guide]
+* link:documentation/advanced-installation.adoc[Advanced Installation]
+* <<Contribute>>
+
+== Overview
+COMING SOON!
+
+== Basic Installation
+
+
+
+=== Download the Repo
+
+https://github.com/ramrexx/ServiceNow_ServiceCatalog/archive/master.zip[ServiceNow_ServiceCatalog]
+
+=== Import the Update Set
+
+* Log into your ServiceNow intance
+* Navigate to *Retrieved Update Sets* and click on *Import Update Set from XML*
+
+image:images/snow-retrieve-update-set.png[link=images/snow-retrieve-update-set.png]
+
+* Upload the *ServiceNow CloudForms Application.xml*
+* Within the retrieved update set click on *Preview Update Set*
+
+image:images/snow-preview-update-set.png[link=images/snow-preview-update-set.png]
+
+* You may see a warning message during the preview. Believe it or not this is normal.
+
+image:images/snow-preview-errors.png[images/snow-preview-errors.png]
+
+* Select all of the errors and delete them.
+
+image:images/snow-preview-delete.png[link=images/snow-preview-delete.png]
+
+* After the delete is finished click on *Commit update set*
+
+<<top>>
+
+== Contribute
+
+Have an idea and want to help? Fork the repo and link:https://github.com/ramrexx/ServiceNow_ServiceCatalog/pulls[Submit a pull request]
+
+<<top>>
