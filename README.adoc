@@ -36,7 +36,7 @@ COMING SOON!
 
 === Import Update Set
 
-Download the update set to your desktop: link:https://github.com/ramrexx/ServiceNow_ServiceCatalog/blob/master/update_set/ServiceNow-CloudForms-Application.xml[ServiceNow CloudForms Application]
+Download the update set to your desktop: link:https://github.com/ramrexx/ServiceNow_ServiceCatalog/archive/master.zip[ServiceNow CloudForms Application]
 
 * Log into your ServiceNow instance
 * Navigate to *Retrieved Update Sets* and click on *Import Update Set from XML*
