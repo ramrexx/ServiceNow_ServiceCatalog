@@ -1,0 +1,12 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: servicenow_delete_service_templates
+    inherits: 
+    description: 
+  fields:
+  - Step2:
+      value: Method::servicenow_delete_service_templates

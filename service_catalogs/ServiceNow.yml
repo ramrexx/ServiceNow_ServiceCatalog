@@ -1,0 +1,109 @@
+---
+- ServiceNow:
+    name: ServiceNow
+    description: ServiceNow
+    template:
+    - name: ServiceNow - Sync Service_Templates
+      description: ServiceNow - Sync Service_Templates
+      type: 
+      display: true
+      service_type: atomic
+      prov_type: generic
+      provision_cost: 
+      long_description: ''
+      options:
+        :button_order:
+        - cb-Sync Service Template(s)
+        - cb-Delete Service Template(s)
+      service_template_catalog_name: ServiceNow
+      resource_actions:
+      - action: Provision
+        ae_namespace: Integration/ServiceNow/CloudForms_Application
+        ae_class: StateMachines
+        ae_instance: servicenow_sync_service_templates
+        ae_message: 
+        ae_attributes: {}
+        dialog_label: servicenow_list_service_templates
+      - action: Retirement
+        ae_namespace: Integration/ServiceNow/CloudForms_Application
+        ae_class: StateMachines
+        ae_instance: servicenow_delete_service_templates
+        ae_message: 
+        ae_attributes: {}
+        dialog_label: servicenow_list_service_templates
+      custom_buttons:
+      - description: Sync Service Template(s)
+        applies_to_exp: 
+        options:
+          :button_image: 14
+          :display: true
+        userid: admin
+        wait_for_complete: 
+        name: Sync Service Templates
+        visibility:
+          :roles:
+          - _ALL_
+      - description: Delete service template(s) from ServiceNow
+        applies_to_exp: 
+        options:
+          :button_image: 7
+          :display: true
+        userid: admin
+        wait_for_complete: 
+        name: Delete Service Template(s)
+        visibility:
+          :roles:
+          - _ALL_
+      custom_button_sets: []
+    - name: ServiceNow - Sync MIQ Template(s)
+      description: ServiceNow - Sync MIQ Template(s)
+      type: 
+      display: true
+      service_type: atomic
+      prov_type: generic
+      provision_cost: 
+      long_description: ''
+      options:
+        :button_order:
+        - cb-Sync MIQ Template(s)
+        - cb-Delete MIQ Template(s)
+      service_template_catalog_name: ServiceNow
+      resource_actions:
+      - action: Provision
+        ae_namespace: Integration/ServiceNow/CloudForms_Application
+        ae_class: StateMachines
+        ae_instance: servicenow_sync_miq_templates
+        ae_message: 
+        ae_attributes: {}
+        dialog_label: servicenow_list_miq_templates
+      - action: Retirement
+        ae_namespace: Integration/ServiceNow/CloudForms_Application
+        ae_class: StateMachines
+        ae_instance: servicenow_delete_miq_templates
+        ae_message: 
+        ae_attributes: {}
+        dialog_label: servicenow_list_miq_templates
+      custom_buttons:
+      - description: Sync MIQ Template(s) to ServiceNow
+        applies_to_exp: 
+        options:
+          :button_image: 14
+          :display: true
+        userid: admin
+        wait_for_complete: 
+        name: Sync MIQ Template(s)
+        visibility:
+          :roles:
+          - _ALL_
+      - description: Delete MIQ Template(s) from ServiceNow
+        applies_to_exp: 
+        options:
+          :button_image: 7
+          :display: true
+        userid: admin
+        wait_for_complete: 
+        name: Delete MIQ Template(s)
+        visibility:
+          :roles:
+          - _ALL_
+      custom_button_sets: []

@@ -17,165 +17,57 @@
 -------------------------------------------------------------------------------
 ////
 
-= CloudForms ServiceNow_ServiceCatalog
+= CloudForms ServiceNow_ServiceCatalog Project
 
 The purpose of this project is to provide a starting point for integrating Red Hat (R) https://www.redhat.com/en/technologies/cloud-computing/cloudforms[Red Hat CloudForms] and ServiceNow's Service Catalog.
 
-
 == Table of Contents
 
-* <<Overview>>
-* <<Import Update Set>>
-** link:documentation/mid-server.adoc[Install MID Server]
-** link:documentation/basic.adoc[Basic Setup Guide]
-** link:documentation/advanced.adoc[Advanced Setup Guide]
-* <<Contribute>>
+** <<Overview>>
+** link:documentation/updateset.adoc[Install and Configure Update Set]
+** link:documentation/midserver.adoc[Install and Configure MID Server]
+** link:documentation/restmessage.adoc[Configure REST Message]
+** link:documentation/provision.adoc[Provision a Catalogitem]
+** link:documentation/troubleshooting.adoc[Troubleshooting Guide]
+** link:documentation/advanced.adoc[Advanced Guide (WIP)]
+** <<Contribute>>
 
-== Overview
+=== Overview
 COMING SOON!
 
-=== Import Update Set
+==== How ServiceNow Catalogitems Work
 
-Download the update set to your desktop: link:https://github.com/ramrexx/ServiceNow_ServiceCatalog/archive/master.zip[ServiceNow CloudForms Application]
+This is what happens behind the scenes when a catalogitem is ordered through ServiceNow and sent to CloudForms.
 
-* Log into your ServiceNow instance
-* Navigate to *Retrieved Update Sets* and click on *Import Update Set from XML*
+. User logs into ServiceNow.
+. User opens the catalogitem.
+.. The `Catalogitem` contains:
+... A defined `workflow`.
+... A list of `variable(s)`.
+. User orders the `Catalogitem`.
+.. A `Request` is created for the `Catalogitem`.
+.. The `Request` goes through an internal approval `Workflow`.
+.. The `Request` is approved.
+.. The `Request Item` task:
+... Passes the `Catalogitem` variables to the `Workflow`.
+... Executes the `Workflow` specified in the `Catalogitem`.
+... The `Workflow` points to a `REST Message` which defines:
+.... The `REST Endpoint`.
+.... The `MID Server`.
+.... The `HTTP Headers`.
+.... The `JSON payload` to be passed to CloudForms.
+... The `REST Message` then writes the job to the ServiceNow `ecc_queue`.
+.. The `MID Server` frequently queries the ServiceNow `ecc_queue` message bus for assigned tasks.
+.. The `MID Server` finds the `REST Message`.
+.. The `MID Server` executes the `REST Message` along with the `JSON Payload` to CloudForms.
+.. The `MID Server` then writes out STDOUT to the `Workflow Activity History` for the `Request Item`.
 
-image:documentation/images/snow-retrieve-update-set.png[link=documentation/images/snow-retrieve-update-set.png]
-
-* Upload the *ServiceNow CloudForms Application.xml*
-* Within the retrieved update set click on *Preview Update Set*
-
-image:documentation/images/snow-preview-update-set.png[link=documentation/images/snow-preview-update-set.png]
-
-* You may see a warning message during the preview. Believe it or not this is normal.
-
-image:documentation/images/snow-preview-errors.png[link=documentation/images/snow-preview-errors.png]
-
-* Select all of the errors and delete them.
-
-image:documentation/images/snow-preview-delete.png[link=documentation/images/snow-preview-delete.png]
-
-* After the delete is finished click on *Commit update set*
 
 <<top>>
 
-=== Gather Required Information
-
-Before you can integrate ServiceNow with CloudForms you *MUST* gather the following pieces of information from CloudForms.
-
-** <<SERVICECATALOG_ID>>
-** <<SERVICETEMPLATE_ID>>
-** <<CloudForms Credentials>>
-
-=== SERVICECATALOG_ID
-
-There is currently no *EASY* way to get the SERVICECATALOG_ID from CloudForms in the UI. So we will need to use an API call to pull back the id.
-
-* Use SSH to log into CloudForms as root
-* Execute the following command to pull back a list service catalog ids:
-
- curl -k -u admin:smartvm -X GET https://localhost/api/service_catalogs?expand=resources | python -m json.tool|grep \"id -A 1 -B 2
-
-  "description": "Cloud Service Catalog",
-  "href": "https://localhost/api/service_catalogs/12000000000003",
-  "id": 12000000000003,
-  "name": "Cloud Service Catalog",
-  "description": "Infrastructure Service Catalog",
-  "href": "https://localhost/api/service_catalogs/12000000000002",
-  "id": 12000000000002,
-  "name": "Infrastructure Service Catalog",
-
-NOTE: Take note of the SERVICECATALOG_ID that you want because you will need it for the next step!
-
-=== SERVICETEMPLATE_ID
-
-There is currently no *EASY* way to get the SERVICETEMPLATE_ID from CloudForms in the UI. So we will need to use an API call to pull back the id.
-
-* Using the SERVICECATALOG_ID from the previous step we can now if we explore the Service Catalog's service_templates (or catalog items).
-* Execute the following command to pull back a list service_template ids:
-
- curl -k -u admin:smartvm -X GET https://localhost/api/service_catalogs/12000000000002/service_templates?expand=resources | python -m json.tool|grep \"id -A5 -B2
-
-   "guid": "3ea7c49c-9a1d-11e6-96c6-000c29066205",
-   "href": "https://localhost/api/service_catalogs/12000000000002/service_templates/12000000000003",
-   "id": 12000000000003,
-   "long_description": "",
-   "miq_group_id": 12000000000002,
-   "name": "VMware - RHEL7",
-   "options": {},
-   "prov_type": "vmware",
-
-NOTE: Take note of the SERVICETEMPLATE_ID that you want because you will need it for the next step!
-
-==== CloudForms Credentials
-
-TIP: For some reason when making REST message `post` calls to CloudForms the username gets stripped from the api call. This only seems to effect ServiceNow Geneva or newer so this is my work-a-around for now!
-
-* Use SSH to log into CloudForms as root.
-
-  curl -v -k -u admin:smartvm -X GET https://localhost/api/ 2>&1 /dev/null | grep Auth
-
-  > Authorization: Basic YWRtaW46c21hcnR2bQ==
-
-NOTE: Copy your encoded credentials somwhere because you will need them in the next step!
-
-=== Install and configure a MID Server
-
-The MID Server is a small application that runs in your environment. Its sole purpose is to execute REST calls on behalf of ServiceNow behind your firewall. It monitors ServiceNow's ecc_queue for tasks that it needs process. So for ServiceNow to make a REST call to your Cloudforms server bhind your firewall you will need a MID Server.
-
-* Log into your ServiceNow instance
-* Navigate to MID Server *Downloads* and download the appropriate (ZIP) package
-
-image:documentation/images/snow-mid-server-download.png[link=documentation/images/snow-mid-server-download.png]
-
-NOTE: You can run the MID server anywhere. I chose to download the Linux 64-bit package on my CloudForms appliance into the `/root/servicenow` director.
-
-* Extract the ZIP into a directory
-* Edit the ./servicenow/agent/config.xml and change the following *REQUIRED* parameters:
-** `url`
-** `mid.instance.username`
-** `mid.instance.password`
-** `name`
-
-NOTE: You must put the password in clear text. But don't worry it will encrypt the password as soon as you start the MID server. Also, if your MID Server requires a proxy server to get to your instance you can specify proxy infomration in the *COMMON OPTIONAL* parameters section.
-
-* Start the MID Server service by running `./start.sh`
-* Log back into your ServiceNow intance
-* Navigate to MID Server *Servers*
-
-=== Configure ServiceNow Catalog Item
-
-* Log into your ServiceNow instance.
-* Navigate to *REST Message*
-
-image:documentation/images/snow-rest-message-list.png[link=documentation/images/snow-rest-message-list.png]
-
-* Select one of the *pre-built* CloudForms messages.
-
-TIP: You can create your own REST Message here if you want.
-
-* Currently there are samples for VMware, RHEV, Openstack and Amazon.
-* At the bottom of the REST Message record select `post`.
-
-image:documentation/images/snow-rest-message-select-post.png[link=documentation/images/snow-rest-message-select-post.png]
-
-* Update the `post` REST Message endpoint with the following:
-** IP/Hostname of your CloudForms appliance
-** SERVICECATALOG_ID
-
-
-
-* This is is where you will define what JSON parameters will be passed to CloudForms.
-.
-
-.
-
-
-
-
-== Contribute
+=== Contribute
 
 Have an idea and want to help? Fork the repo and link:https://github.com/ramrexx/ServiceNow_ServiceCatalog/pulls[Submit a pull request]
 
-<<top>>
+
+link:documentation/updateset.adoc[ Next ]

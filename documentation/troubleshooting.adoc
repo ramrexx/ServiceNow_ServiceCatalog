@@ -18,44 +18,44 @@
 -------------------------------------------------------------------------------
 ////
 
-= CloudForms ServiceNow_ServiceCatalog Troubleshooting Guide
+link:https://github.com/ramrexx/ServiceNow_ServiceCatalog[ Home ]
 
-* <<Authentication>>
-* <<Connectivity>>
-* <<Logging>>
-* <<Open an Issue>>
+= Troubleshooting Guide
 
+Here is a list of common problems we have seen. Hopefully some of these are helpful to you. If you find something missing from this page please fork the repo and link:https://github.com/ramrexx/ServiceNow_ServiceCatalog/pulls[Submit a pull request].
 
-== Authentication
+== Table of Contents
 
-** Ensure that your credentials are properly set in the statemachine classes. Sometimes the password just needs to be re-entered.
-** Ensure that you have sufficient privileges to perform CRUD operations.
+** <<CloudForms is not Receiving My REST Message>>
+** <<HTTP Errors>>
 
-<<top>>
+=== CloudForms is not Receiving My REST Message
 
-== Connectivity
+* Check the MID Server logs in `/opt/servicenow/agent/logs/agent0.log.0` to verify that the job is getting to the MID Server.
 
-** Ensure that you can get to your ServiceNow instance from the CloudForms server.
+* Check the CloudForms api log in `/var/www/miq/vmdb/logs/api.log` to see if the REST api call is making it in there.
 
-*** Try this command to ensure that you can return a JSON list of incidents:
+* Check the `Workflow Activity History` to see what message is being returned.
 
- curl -k -v -H "Accept:application/json" -H "Content-Type:application/json" -u username:password -X GET https://your-instance.service-now.com/api/now/table/incident
+=== HTTP Errors
 
-*** Try this command to ensure that you can return a JSON list of Linux CMDB records:
+* Ensure that the `MID Server` can resolve the `REST Endpoint` by running this query on the `MID Server`
 
- curl -k -v -H "Accept:application/json" -H "Content-Type:application/json" -u username:password -X GET https://your-instance.service-now.com/api/now/table/cmdb_ci_linux_server
+ curl -v -k -u admin:smartvm -X GET https://<YOUR-CLOUDFORMS-HOSTNAME>/api/ 2>&1 /dev/null | grep Auth
 
-** If these commands are failing then it is possible that you will need a proxy server or your Service Now credentials do not have the necessary rights to view the records.
+* Ensure that your `REST Message` has a properly formatted `JSON payload`. You can test this as showin by exeucting this example curl command right from your `MID Server`.
 
-<<top>>
+NOTE: Keep in mind that your parameters may be different so you will need to populate the `resource` payload with your options.
 
-== Logging
+ curl -v -k -u admin:smartvm -H "Content-Type: application/json" -X POST https://cloudforms56a/api/service_catalogs/12000000000001/service_templates -d \
 
-** Check the /var/www/miq/vmdb/log/automation.log and /var/www/miq/vmdb/log/evm.log for errors.
-
-<<top>>
-
-== Open an Issue
-** Still stuck? Open an issue here with a detailed description of your problem: link:https://github.com/ramrexx/CloudForms_ServiceNow/issues[Open an issue]
+'{
+  "action"                      : "order",
+  "resource"                    : {
+    "href"                      : "https://cloudforms.example.com/api/service_templates/12000000000015",
+    "service_name"              : "Service-Now Test",
+    "tag_0_environment"         : "dev",
+    "option_1_vm_name"          : "snow2"}
+}'
 
 <<top>>

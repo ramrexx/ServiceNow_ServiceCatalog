@@ -1,5 +1,5 @@
 ////
- advanced-installation.adoc
+ advanced.adoc
 -------------------------------------------------------------------------------
    Copyright 2016 Kevin Morey <kevin@redhat.com>
 
@@ -17,36 +17,50 @@
 -------------------------------------------------------------------------------
 ////
 
-= CloudForms ServiceNow_ServiceCatalog Advanced Installation Guide
+link:https://github.com/ramrexx/ServiceNow_ServiceCatalog[ Home ]
 
-This guide
+WARNING: For now this document is a placeholder and should be considered a `work in progress`!
 
+= Advanced Guide
+
+This guide is for those who wish to create the following ServiceNow records from scratch:
+** service catalogitems
+** workflows
+** REST Messages
 
 == Table of Contents
 
-* <<Overview>>
-* <<Advanced Installation>>
-** <<Clone the Repo>>
-** <<Import the Automate Domain>>
-** <<Import the Service Dialogs>>
-** <<Import the Custom Buttons>>
-** <<Update Automate StateMachine>>
-* link:documentation/userguide.adoc[User Guide]
-* link:documentation/
-* link:documentation/troubleshooting.adoc[Troubleshooting Guide]
-* <<Contribute>>
+** <<Overview>>
+** <<Create REST Message>>
+** <<Create Workflow>>
+** <<Create VariableSet>>
+** <<Create Catalogitem>>
+** <<Order Catalogitem>>
+** <<Contribute>>
 
 == Overview
-COMING SOON!
 
-== Advanced Installation
+<<top>>
 
+== Create REST Message
 
+<<top>>
 
-=== Clone the Repo
+== Create Workflow
 
- git clone https://github.com/ramrexx/ServiceNow_ServiceCatalog.git
+<<top>>
 
+== Create VariableSet
+
+<<top>>
+
+== Create Catalogitem
+
+<<top>>
+
+== Order Catalogitem
+
+<<top>>
 
 == Contribute
 

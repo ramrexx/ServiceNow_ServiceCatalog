@@ -1,0 +1,12 @@
+---
+object_type: domain
+version: 1.0
+object:
+  attributes:
+    name: ServiceNow_ServiceCatalog
+    description: CloudForms ServiceNow Integration
+    display_name: 
+    system: false
+    priority: 2
+    enabled: true
+    tenant_id: 12000000000001

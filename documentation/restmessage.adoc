@@ -1,0 +1,134 @@
+////
+ restmessage.adoc
+-------------------------------------------------------------------------------
+   Copyright 2016 Kevin Morey <kevin@redhat.com>
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-------------------------------------------------------------------------------
+////
+
+link:https://github.com/ramrexx/ServiceNow_ServiceCatalog[ Home ]
+
+= Configure REST Message
+
+The REST Message is where the `endpoint`, `HTTP Headers`, `MID Server` and `JSON Payload` are configured. The `CloudForms Application` update set contains many samples that you can use to quickly demonstrate this integration.
+
+== Table of Contents
+
+** <<Configure REST Message>>
+** <<Modify Post Endpoint>>
+** <<Choose MID Server>>
+** <<Enter Credentials>>
+** <<Modify JSON Payload>>
+
+=== Configure REST Message
+
+* Log into your ServiceNow instance.
+* Navigate to *REST Message*
+* Select one of the *pre-built* CloudForms REST messages that you would like to use.
+
+image:images/snow-rest-message-list.png[link=images/snow-rest-message-list.png]
+
+* At the bottom of the REST Message record select `post`.
+
+image:images/snow-rest-message-select-post.png[link=images/snow-rest-message-select-post.png]
+
+<<top>>
+
+=== Modify Post Endpoint
+
+* Unlock the `post` REST Message endpoint and update the `CLOUDFORMS.EXAMPLE.COM` with the hostname/IP address of your CloudForms appliance.
+
+image:images/snow-rest-message-endpoint.png[link=images/snow-rest-message-endpoint.png]
+
+* You will need to substitute `SERVICECATALOG_ID` for your CloudForms Service_Catalog ID of the item that you wish to provision.
+* You can get this information by running the following:
+
+ curl -k -u admin:smartvm -X GET https://localhost/api/service_catalogs?expand=resources | python -m json.tool|grep \"id -A 1 -B 2
+
+** Output:
+
+  "description": "Cloud Service Catalog",
+  "href": "https://localhost/api/service_catalogs/12000000000003",
+  "id": 12000000000003,
+  "name": "Cloud Service Catalog",
+  "description": "Infrastructure Service Catalog",
+  "href": "https://localhost/api/service_catalogs/12000000000002",
+  "id": 12000000000002,
+  "name": "Infrastructure Service Catalog",
+
+  *** As shown above *12000000000003* is the Id of the `Cloud Service Catalog`
+  *** As shown above *12000000000002* is the Id of the `Infrastructure Service Catalog`
+
+* So that your `endpoint` would look something like this:
+
+ https://mycloudforms.example.com/api/service_catalogs/12000000000002/service_templates
+
+<<top>>
+
+=== Choose MID Server
+
+* Locate and choose your MID Server
+
+image:images/snow-rest-message-midserver.png[link=images/snow-rest-message-midserver.png]
+
+<<top>>
+
+=== Enter Credentials
+
+* You then need to enter your own encoded credentials in the `authorization` HTTP Header.
+* You can get this information by running the following:
+
+ curl -v -k -u admin:smartvm -X GET https://localhost/api/ 2>&1 /dev/null | grep Auth
+
+  > Authorization: Basic YWRtaW46c21hcnG2bQ==
+
+NOTE: Copy your encoded credentials into the `authorization` HTTP Header.
+
+image:images/snow-rest-message-post-authorization.png[link=images/snow-rest-message-post-authorization.png]
+
+<<top>>
+
+=== Modify JSON Payload
+
+* Locate and Modify the HTTP Query payload. This is where the JSON structure that is passed to CloudForms lives.
+
+image:images/snow-rest-message-httpquery.png[link=images/snow-rest-message-httpquery.png]
+
+* You will need to substitute `SERVICETEMPLATE_ID` for your CloudForms Service_Template ID that you wish to provision.
+* You can get this information by running the following (substitute SERVICECATALOG_ID with your ID from above):
+
+ curl -k -u admin:smartvm -X GET https://localhost/api/service_catalogs/SERVICECATALOG_ID/service_templates?expand=resources | python -m json.tool|grep \"id -A5 -B2
+
+** Output:
+
+   "guid": "3ea7c49c-9a1d-11e6-96c6-000c29066205",
+   "href": "https://localhost/api/service_catalogs/12000000000002/service_templates/12000000000003",
+   "id": 12000000000003,
+   "long_description": "",
+   "miq_group_id": 12000000000002,
+   "name": "VMware - RHEL7",
+   "options": {},
+   "prov_type": "vmware",
+
+  *** As shown above *12000000000003* is the Id of the *VMware - RHEL7* catalog item in CloudForms.
+
+* Update the HTTP Query JSON payload with the `SERVICETEMPLATE_ID` so that your `href` would look something like this:
+
+  "href" : "https://mycloudforms.example.com/api/service_templates/12000000000003"
+
+* Click on `Update` to save your changes.
+
+<<top>>
+
+link:midserver.adoc[ Previous ] | link:provision.adoc[ Next ]

@@ -1,0 +1,12 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: servicenow_delete_miq_templates
+    inherits: 
+    description: 
+  fields:
+  - rel1:
+      value: "/Integration/ServiceNow/CloudForms_Application/StateMachines/servicenow_delete_miq_templates"

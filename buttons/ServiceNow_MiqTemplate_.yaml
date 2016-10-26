@@ -1,0 +1,57 @@
+---
+:custom_buttons_sets:
+- name: ServiceNow|MiqTemplate|
+  description: ServiceNow
+  set_type: CustomButtonSet
+  read_only: 
+  mode: 
+  custom_buttons:
+  - description: Delete record from ServiceNow miq_templates table
+    applies_to_class: MiqTemplate
+    applies_to_exp: 
+    options:
+      :button_image: 7
+      :display: true
+    userid: admin
+    wait_for_complete: 
+    name: Delete miq_templates record
+    visibility:
+      :roles:
+      - _ALL_
+    applies_to_id: 
+    resource_actions:
+      action: 
+      ae_namespace: SYSTEM
+      ae_class: PROCESS
+      ae_instance: Request
+      ae_message: 
+      ae_attributes:
+        request: servicenow_delete_miq_templates
+  - description: Sync miq_templates table to ServiceNow
+    applies_to_class: MiqTemplate
+    applies_to_exp: 
+    options:
+      :button_image: 14
+      :display: true
+    userid: admin
+    wait_for_complete: 
+    name: Sync miq_templates
+    visibility:
+      :roles:
+      - _ALL_
+    applies_to_id: 
+    resource_actions:
+      action: 
+      ae_namespace: SYSTEM
+      ae_class: PROCESS
+      ae_instance: Request
+      ae_message: 
+      ae_attributes:
+        request: servicenow_sync_miq_templates
+  set_data:
+    :button_order:
+    - Sync miq_templates
+    - Delete miq_templates record
+    :button_image: 8
+    :display: true
+    :group_index: 3
