@@ -77,7 +77,7 @@ image:images/mid-server-validate.png[link=images/mid-server-validate.png]
 
 TIP: Optionally you can set the MID Server Service to automatically start.
 
-* Create a file called /etc/systemd/system/*mid.server* and copy the contents below to it.
+* Create a file called /etc/systemd/system/*mid.service* and copy the contents below to it.
 
 [source, ini]
 ----
