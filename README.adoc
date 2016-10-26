@@ -60,7 +60,7 @@ This is what happens behind the scenes when a catalogitem is ordered through Ser
 .. The `MID Server` frequently queries the ServiceNow `ecc_queue` message bus for assigned tasks.
 .. The `MID Server` finds the `REST Message`.
 .. The `MID Server` executes the `REST Message` along with the `JSON Payload` to CloudForms.
-.. The `MID Server` then writes out STDOUT to the `Workflow Activity History` for the `Request Item`.
+.. The `MID Server` then writes the `results` to the `Workflow Activity History` for the `Request Item`.
 
 
 <<top>>
