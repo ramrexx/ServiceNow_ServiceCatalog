@@ -105,11 +105,11 @@ WantedBy=multi-user.target
 
 === Troubleshooting MID Server
 
-* Logging - If your MID Server is not showing up you can look at the /opt/servicenow/agent/logs/agent0.log.0.
+* Logging - If your MID Server is not showing up you can look at the /opt/agent/logs/agent0.log.0.
 
 * Validate - Ensure that your MID Server has been validated otherwise it will be to execute tasks coming from ServiceNow.
 
-* Connectivity - If your MID Server requires a proxy to get to the ServiceNow instance you can specify proxy settings in `/opt/servicenow/agent/config.xml` under the *COMMON OPTIONAL* parameters section.
+* Connectivity - If your MID Server requires a proxy to get to the ServiceNow instance you can specify proxy settings in `/opt/agent/config.xml` under the *COMMON OPTIONAL* parameters section.
 
 <<top>>
 

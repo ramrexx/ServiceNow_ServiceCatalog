@@ -31,7 +31,7 @@ Here is a list of common problems we have seen. Hopefully some of these are help
 
 === CloudForms is not Receiving My REST Message
 
-* Check the MID Server logs in `/opt/servicenow/agent/logs/agent0.log.0` to verify that the job is getting to the MID Server.
+* Check the MID Server logs in `/opt/agent/logs/agent0.log.0` to verify that the job is getting to the MID Server.
 
 * Check the CloudForms api log in `/var/www/miq/vmdb/logs/api.log` to see if the REST api call is making it in there.
 
